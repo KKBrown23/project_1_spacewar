@@ -1,0 +1,46 @@
+Developing a game:
+    1. Get the graphics(animation-frames)
+        a. find a gif                       EX: sapecship gif
+        b. seperated into frames            EX: https://ezgif.com/split
+        c. resize the frames using GIMP     EX: use the resize tool and the cut tool
+        d. display the frames in your       EX: use PhotoImage class to read the images
+                game as a flip-book
+
+    2.  Game Plan[defining the classes]
+        
+        0.  Game
+                Data:
+                    points
+                    is_running
+                    window
+                    canvas
+                Action:
+                    start()
+                    restart()
+                    quit()
+        a.  Ship
+                Data:
+                    width
+                    height
+                    coords
+                    game
+                Action:
+                    shoot()
+                    move_left()
+                    move_right()
+        b.  Bullet
+                Data:
+                    width
+                    height
+                    coords
+                    game
+                Action:
+                    move_up()
+        c.  Astroid
+                Data:
+                    width
+                    height
+                    coords
+                    game
+                Action:
+                    move_down()
