@@ -2,9 +2,23 @@ from tkinter import *
 from tkinter import messagebox
 import time
 import random
+
+
+def read_high_score(filename):
+    file = open(filename, 'r')
+    content = file.read()
+    print(content)
+    file.close()
+    return int(content)
+def write_high_score(filename, highscore):
+    file = open(filename, 'w')
+    file.write(str(highscore))
+    file.close()
+
 class Game:
     def __init__(self):
         self.points = 0
+        self.high_score = read_high_score('high_score.txt')
         self.is_running = False
         self.window = Tk()
         self.window.title("Space Worrior")
@@ -12,6 +26,7 @@ class Game:
         self.window.wm_attributes("-topmost", 1)
         self.canvas = Canvas(self.window, height=500, width=500)
         self.points_label_id = self.canvas.create_text(400, 10, text=f"Points: {self.points}")
+        self.high_score_label_id = self.canvas.create_text(300, 10, text=f"High Score: {self.high_score}")
         self.canvas.pack()
         self.asteroid_list = []
         self.ship = Ship(self)
@@ -24,10 +39,18 @@ class Game:
         for asteroid in self.asteroid_list:
             self.canvas.delete(asteroid.img_id)
         self.asteroid_list = []
+        if(self.points > self.high_score):
+            self.high_score = self.points
+            self.canvas.itemconfig(self.high_score_label_id, text=f'High Score: {self.high_score}')
         self.points = 0
+        self.canvas.itemconfig(self.points_label_id, text=f'Points: {self.points}')
+
         self.start()
     def quit(self):
         self.is_running = False
+        write_high_score('high_score.txt', self.high_score)
+        self.window.destroy()
+
     def generate_astroid(self):
         new_astroid = Asteroid(self)
         self.asteroid_list.append(new_astroid) 
@@ -158,7 +181,7 @@ class Asteroid:
             if(user_choice == True):
                 self.game.restart()
             else:
-                self.game.window.destroy()
+                self.game.quit()
     def has_hit_bottom(self):
         coords = self.get_coords()
         if(not coords):
@@ -169,13 +192,21 @@ class Asteroid:
             self.game.points -= 1
             self.game.canvas.itemconfig(self.game.points_label_id, text=f'Points: {self.game.points}')
             
+        if self.game.points < 0 and self.game.is_running:
+            self.game.is_running = False
+            user_choice = messagebox.askyesno(title='Game Over', message='Do you want to restart?')
+            if( user_choice == True):
+                self.game.restart()
+            else:
+                self.game.quit()
     def get_coords(self):
-        coords = self.game.canvas.coords(self.img_id)
-        if(not coords):
-            return
-        coords.append(coords[0] + self.width)
-        coords.append(coords[1] + self.height)
-        return {'x1' : coords[0], 'y1' : coords[1], 'x2' : coords[2], 'y2' : coords[3] }
+        if(self.game.is_running):
+            coords = self.game.canvas.coords(self.img_id)
+            if(not coords):
+                return
+            coords.append(coords[0] + self.width)
+            coords.append(coords[1] + self.height)
+            return {'x1' : coords[0], 'y1' : coords[1], 'x2' : coords[2], 'y2' : coords[3] }
 
 def checkCollision(asteroid_coords, bullet_coords):
     if (bullet_coords['y1'] < asteroid_coords['y2']) and \

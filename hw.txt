@@ -1,0 +1,7 @@
+Feature : When you have no points you die
+HINT:   if points < 0
+        show gameover->call game.restart()
+
+
+search online how can we save the high_score into a file
+and how can we read it when the game starts
