@@ -5,3 +5,16 @@ HINT:   if points < 0
 
 search online how can we save the high_score into a file
 and how can we read it when the game starts
+
+
+Write down 10 things that you learned from this project
+- How to save a high score into a file
+- Check for collisons
+- Using loops to quickly go through images
+- How to use the photo editing app
+- Moving objects
+- To create points
+- Getting coordinates for different objects
+- How to use the __init__ function
+- How to create different classes
+- Using github to save games

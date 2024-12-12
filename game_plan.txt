@@ -44,3 +44,6 @@ Developing a game:
                     game
                 Action:
                     move_down()
+    2b. Helper function
+        read_high_score()
+        write_high_score()
